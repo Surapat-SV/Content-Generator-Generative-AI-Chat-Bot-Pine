@@ -2,7 +2,7 @@ import streamlit as st
 import google.generativeai as genai
 
 # Set up the app title and subtitle
-st.title("Content Generator")
+st.title("📚 Content Generator 📚")
 st.subheader("Generate a content using the AIDA framework")
 
 # Capture Gemini API Key
