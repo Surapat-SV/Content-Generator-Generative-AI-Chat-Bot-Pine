@@ -14,3 +14,4 @@ if user_input := st.chat_input("What's on your minds: ", placeholder="Type your 
 # Display all messages using st.write
 for message in st.session_state.chat_history:
     st.chat_message(message)
+    st.markdown(message)
