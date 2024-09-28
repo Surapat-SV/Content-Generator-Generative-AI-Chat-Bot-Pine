@@ -34,7 +34,7 @@ if user_input := st.chat_input("Type your message here..."):
     # Use Gemini AI to generate a bot response
     if model:
         try:
-            response = model.generate_content('Introduce yourself as "N\'Assist," a digital marketing intern. Can help Generate social media content using AIDA framework')
+            response = model.generate_content('Introduce yourself as "N\'Assist," a digital marketing intern. Can help generate social media content using AIDA framework')
             bot_response = response.text
 
             # Store and display the bot response
