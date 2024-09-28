@@ -13,6 +13,6 @@ for message in st.session_state.chat_history:
         st.markdown(message)
 
 # Capture user input and append to chat history
-if prompt := st.chat_input("Type your message here ..."):
+if prompt := st.chat_input("What is on your mind"):
     st.session_state.chat_history.append(prompt)
     st.chat_message("user").markdown(prompt)
