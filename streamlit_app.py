@@ -8,7 +8,7 @@ st.subheader("Generate content using the AIDA framework or just enjoy a chat!")
 # Capture Gemini API Key
 gemini_api_key = st.text_input("Gemini API Key:", placeholder="Type your API Key here...", type="password")
 
-# Initialize session state for chat history, configuration status, model instance, introduction status, and guidance flag
+# Initialize session state for chat history, configuration status, model instance, introduction status, guidance flag, and chit-chat memory
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 if "gemini_configured" not in st.session_state:
@@ -19,6 +19,10 @@ if "model" not in st.session_state:
     st.session_state.model = None
 if "guidance_given" not in st.session_state:
     st.session_state.guidance_given = False  # Tracks if the user has been reminded to provide product/service
+if "chitchat_memory" not in st.session_state:
+    st.session_state.chitchat_memory = []  # Stores up to 10 chit-chat messages from the user
+if "chitchat_count" not in st.session_state:
+    st.session_state.chitchat_count = 0  # Tracks the number of chit-chat interactions
 
 # Configure Gemini Model if API key is provided and not configured yet
 if gemini_api_key and not st.session_state.gemini_configured:
@@ -72,13 +76,43 @@ if user_input:
             st.chat_message("guidance").markdown(guidance_response)
             st.session_state.guidance_given = True
         else:
-            # Continue with joyful chit-chat without forcing content creation
-            chit_chat_response = (
-                "Let's just chat! 😄 Tell me more about your day, your favorite hobbies, or anything fun! "
-                "I'm here to keep you company."
-            )
-            st.session_state.chat_history.append(("chit-chat", chit_chat_response))
-            st.chat_message("chit-chat").markdown(chit_chat_response)
+            # Store chit-chat interactions in memory
+            st.session_state.chitchat_memory.append(user_input)
+            st.session_state.chitchat_count += 1
+            
+            # Send the stored chit-chat memory to Gemini for context-aware response
+            if st.session_state.model:
+                try:
+                    # Prepare the conversation context to send to Gemini
+                    conversation_context = "\n".join(st.session_state.chitchat_memory[-10:])
+                    prompt = (
+                        f"Continue this conversation in a friendly and engaging manner. "
+                        f"Here is the conversation so far:\n{conversation_context}\n"
+                        f"Respond joyfully and naturally to the user's last message: '{user_input}'"
+                    )
+                    response = st.session_state.model.generate_content(prompt)
+                    bot_response = response.text  # Assuming response.text contains the generated response
+
+                    # Display generated response based on the scenario
+                    st.session_state.chat_history.append(("chit-chat", bot_response))
+                    st.chat_message("chit-chat").markdown(bot_response)
+
+                except Exception as e:
+                    st.error(f"An error occurred while generating the response: {e}")
+            
+            # If user reaches 10 chit-chat interactions, politely remind them about content creation
+            if st.session_state.chitchat_count >= 10:
+                reminder_response = (
+                    "I've enjoyed our chat so much! 🎉 I do have some content tasks to get back to, though. "
+                    "Do you have any content you'd like me to help with? If so, just let me know your topic! "
+                    "If not, please come back soon for another nice chat. 😊"
+                )
+                st.session_state.chat_history.append(("chit-chat", reminder_response))
+                st.chat_message("chit-chat").markdown(reminder_response)
+                
+                # Reset chit-chat count and prompt for content creation
+                st.session_state.chitchat_count = 0
+                st.session_state.chitchat_memory.clear()
 
     # Use Agent 1: Content Creation Agent to generate content using AIDA
     elif st.session_state.model:
