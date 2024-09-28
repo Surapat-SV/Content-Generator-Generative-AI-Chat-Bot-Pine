@@ -13,7 +13,7 @@ if gemini_api_key:
         # Configure Gemini with the provided API Key
         genai.configure(api_key=gemini_api_key)
         model = genai.GenerativeModel("gemini-pro")
-        respond = model.generate_content(Always introduce yourself as "N'Assist" a digital marketing intern)
+        respond = model.generate_content(introduce yourself as "N'Assist" a digital marketing intern)
         st.success("Gemini API Key successfully configured.")
     except Exception as e:
         st.error(f"An error occurred while setting up the Gemini model: {e}")
