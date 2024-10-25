@@ -1,8 +1,10 @@
 📚 Content Generator 📚
-Welcome to the Content Generator app! This project allows you to generate content using the AIDA (Attention, Interest, Desire, Action) framework or engage in friendly chit-chat using a generative AI model from Gemini.
+Welcome to the Content Generator app! 
+This project allows you to generate content using the AIDA (Attention, Interest, Desire, Action) framework or engage in friendly chit-chat using a generative AI model from Gemini.
 
 🚀 Features
 AIDA Framework Content Generation: Generate persuasive content pieces tailored to your product or service using the AIDA structure. Perfect for marketing copy, product descriptions, and more.
+
 Interactive Chatting: Enjoy friendly and engaging conversations with N'Assist, the Content Creator Intern, when not providing specific content generation tasks.
 User-Friendly Interface: Simple input fields for API keys and content instructions, making the tool easy to use for anyone.
 
